@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Hello World in Backbone.js</title>
+
+    <style type="text/css">
+    .article {
+        background: linear-gradient(#ccc, #ccf);
+        float: left;
+        width: 20%;
+        height: 200px;
+        padding: 15px;
+        margin: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    </style>
+</head>
+
+<body>
+    <section id="readerapp">
+        <nav>
+            <input id="new-feed" type="text" placeholder="Enter new feed">
+        </nav>
+        <section>
+            <ul id="feed-list"></ul>
+        </section>
+        <section>
+            <ul id="tag-list"></ul>
+        </section>
+        <section>
+            <ul id="articles-view"></ul>
+        </section>
+    </section>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js" type="text/javascript"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js" type="text/javascript"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.0/backbone.localStorage-min.js" type="text/javascript"></script>
+
+    <script type="text/template" id="feed-template">
+        <div class="view">
+            <input class="toggle" type="checkbox">
+            <label>
+                <%- uri %>
+            </label>
+        </div>
+    </script>
+
+    <script type="text/template" id="tag-template">
+        <div class="view">
+            <input class="toggle" type="checkbox">
+            <label>
+                <%- tag %>
+            </label>
+        </div>
+    </script>
+
+    <script type="text/template" id="article-template">
+        <div class='article'>
+            <div>
+                <a href='<%- link %>'>
+                    <%- title %>
+                </a>
+            </div>
+            <%= content %>
+        </div>
+    </script>
+
+    <script type="text/javascript">
+    var app = {};
+
+    app.Feed = Backbone.Model.extend({
+        defaults: {
+            uri: ''
+        }
+    });
+
+    app.FeedList = Backbone.Collection.extend({
+        model: app.Feed,
+        localStorage: new Store("backbone-infiorss")
+    });
+    app.feedList = new app.FeedList();
+
+    app.FeedView = Backbone.View.extend({
+        tagName: 'span',
+        template: _.template($('#feed-template').html()),
+        render: function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        }
+    });
+
+    var feed;
+
+    var view = new app.FeedView({
+        model: feed
+    });
+
+    app.Tag = Backbone.Model.extend({
+        defaults: {
+            tag: '',
+            count: 1,
+            selected: false
+        }
+    });
+
+    app.TagList = Backbone.Collection.extend({
+        model: app.Tag,
+        localStorage: new Store("backbone-infiorss-tags")
+    });
+
+    app.tagList = new app.TagList();
+
+    app.TagView = Backbone.View.extend({
+        el: '#tag-list',
+        template: _.template($('#tag-template').html()),
+        render: function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        },
+        parseTags: function(article) {
+            var contentWords = article.content.split(' ');
+            for (var i = 0; i < contentWords.length; i++) {
+                var word = contentWords[i];
+                var existingTag = app.tagList.find(function(model) {
+                    return model.get('tag') == word
+                })
+                if (word.length < 30) {
+                    if (!existingTag) {
+                        app.tagList.create({
+                            tag: word
+                        });
+                    } else {
+                        existingTag.attributes.count += 1;
+                        existingTag.save();
+                    }
+                }
+            };
+        },
+        displayTags: function() {
+            $('#tag-list').html(''); // TODO - save this and generate only once
+            for (var i = 0; i < app.tagList.length; i++) {
+                var tag = app.tagList.at(i);
+
+                if (tag.get('count') > 1) {
+                    // app.tagList.create({
+                    //     tag: tag.get('tag'),
+                    //     count: tag.get('count')
+                    // });
+                    var view = new app.TagView({
+                        model: tag
+                    });
+                    $('#tag-view').append(view.render().el);
+                }
+            };
+        }
+    });
+
+    app.tagView = new app.TagView();
+
+    app.Article = Backbone.Model.extend({
+        defaults: {
+            link: '',
+            title: '',
+            content: ''
+        }
+    });
+
+    app.ArticleList = Backbone.Collection.extend({
+        model: app.Article,
+        // TODO- why does this require local storage?
+        localStorage: new Store("backbone-infiorss-articles")
+    });
+
+    app.articleList = new app.ArticleList();
+
+    var articlesViewInitialized = false;
+    app.ArticlesView = Backbone.View.extend({
+        tagName: 'span',
+        template: _.template($('#article-template').html()),
+        render: function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        },
+        initialize: function() {
+            // TODO: Not the best solution, this code should maybe be moved to the AppView like feeds are. But it seems like that is poluting AppView.
+            if (!articlesViewInitialized) {
+                app.articleList.on('add', this.addOne, this);
+                app.articleList.on('reset', this.addAll, this);
+                articlesViewInitialized = true;
+            }
+        },
+        addOne: function(article) {
+            // TODO: do we really need a new view? It runs initialize again each time, so I had to add an init bool to make sure events are only registered once.
+            var view = new app.ArticlesView({
+                model: article
+            });
+            $('#articles-view').append(view.render().el);
+        },
+        addAll: function() {
+            this.$('#articles-view').html('');
+            app.articleList.each(this.addOne, this);
+        },
+        displayArticles: function() {
+            app.articleList.each(function(model) {
+                model.destroy();
+            })
+            for (var i = 0; i < app.feedList.length; i++) {
+                var feed = app.feedList.at(i);
+
+                this.getRss(feed.attributes.uri, function(data) {
+                    for (var i = 0; i < data.entries.length; i++) {
+                        var entry = data.entries[i];
+
+                        var isTagSelected = false;
+                        var isFilteredOut = false;
+
+                        for (var j = 0; j < app.tagList.length; j++) {
+                            var tag = app.tagList.at(j);
+
+                            if (tag.get('selected')) {
+                                isTagSelected = true;
+
+                                if (entry.content.indexOf(tag.get('tag') > -1)) {
+                                    isFilteredOut = true;
+                                }
+                            }
+                        };
+
+                        if (isTagSelected && isFilteredOut) {
+                            continue;
+                        }
+
+                        app.articleList.create({
+                            title: entry.title,
+                            link: entry.link,
+                            content: entry.content
+                        });
+
+                        app.tagView.parseTags(entry);
+                        //TODO - shouldn't run every feed, but a pain because it uses callbacks
+                        app.tagView.displayTags();
+                    };
+                });
+            };
+
+        },
+        getRss: function(url, callback) {
+            $.ajax({
+                url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(url),
+                dataType: 'json',
+                success: function(data) {
+                    callback(data.responseData.feed);
+                }
+            });
+        }
+    });
+
+    app.articlesView = new app.ArticlesView();
+
+    app.AppView = Backbone.View.extend({
+        el: '#readerapp',
+        initialize: function() {
+            this.input = this.$('#new-feed');
+            app.feedList.on('add', this.addOne, this);
+            app.feedList.on('reset', this.addAll, this);
+            app.feedList.fetch(); // Load from local storage
+
+            app.articlesView.displayArticles();
+        },
+        events: {
+            'keypress #new-feed': 'createFeedOnEnter'
+        },
+        createFeedOnEnter: function(e) {
+            var enter_key = 13;
+            if (e.which !== enter_key) {
+                return;
+            }
+            app.feedList.create({
+                uri: this.input.val().trim()
+            });
+            this.input.val(''); // Clear the input box
+        },
+        addOne: function(feed) {
+            var view = new app.FeedView({
+                model: feed
+            });
+            $('#feed-list').append(view.render().el);
+        },
+        addAll: function() {
+            this.$('#feed-list').html('');
+            app.feedList.each(this.addOne, this);
+        }
+    });
+
+    app.appView = new app.AppView();
+    </script>
+
+</body>
+
+</html>

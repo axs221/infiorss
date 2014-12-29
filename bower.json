@@ -1,0 +1,25 @@
+{
+  "name": "infiorss",
+  "version": "0.0.0",
+  "authors": [
+    "Shawn Axsom <axs221@gmail.com>"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/js/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "~1.1.2",
+    "backbone-localstorage": "~0.3.2",
+    "requirejs": "~2.1.15",
+    "jquery": "~2.1.3"
+  }
+}
