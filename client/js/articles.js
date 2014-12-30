@@ -52,7 +52,12 @@ define([
             this.$('#articles-view').html('');
             app.articleList.each(this.addOne, this);
         },
+        isDisplayingArticles: false,
         displayArticles: function() {
+            if (this.isDisplayingArticles) {
+                return;
+            }
+            this.isDisplayingArticles = true;
             $('#articles-view').html('');
 
             // If we are refreshing, we are going to recount all of the tags, set them to 0 first to recount
@@ -63,9 +68,11 @@ define([
 
             for (var i = 0; i < app.feedList.length; i++) {
                 var feed = app.feedList.at(i);
+                this.feedCount = app.feedList.length;
 
-                this.getRss(feed, (function(data, feed) {
-                    for (var i = 0; i < data.entries.length; i++) {
+                this.getRss(feed, this, (function(data, feed, caller) {
+                    var articlesToLoadPerFeed = Math.max(1, Math.min(data.entries.length, 21-caller.feedCount))
+                    for (var i = 0; i < articlesToLoadPerFeed; i++) {
                         var entry = data.entries[i];
 
                         var isTagSelected = false;
@@ -98,17 +105,20 @@ define([
                         //TODO - shouldn't run every feed, but a pain because it uses callbacks
                     };
                     app.tagView.displayTags();
+                    caller.isDisplayingArticles = false;
                 }));
             };
 
         },
-        getRss: function(feed, callback) {
+        getRss: function(feed, caller, callback) {
             $.ajax({
                 url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(feed.attributes.uri),
                 dataType: 'json',
                 feed: feed,
                 success: function(data) {
-                    callback(data.responseData.feed, feed);
+                    if (data !== null && data.responseData != null) {
+                        callback(data.responseData.feed, feed, caller);
+                    }
                 }
             });
         }
