@@ -64,7 +64,7 @@ define([
             for (var i = 0; i < app.feedList.length; i++) {
                 var feed = app.feedList.at(i);
 
-                this.getRss(feed.attributes.uri, (function(data) {
+                this.getRss(feed, (function(data, feed) {
                     for (var i = 0; i < data.entries.length; i++) {
                         var entry = data.entries[i];
 
@@ -98,16 +98,17 @@ define([
                         //TODO - shouldn't run every feed, but a pain because it uses callbacks
                     };
                     app.tagView.displayTags();
-                }).bind({feed: feed}));
+                }));
             };
 
         },
-        getRss: function(url, callback) {
+        getRss: function(feed, callback) {
             $.ajax({
-                url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(url),
+                url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(feed.attributes.uri),
                 dataType: 'json',
+                feed: feed,
                 success: function(data) {
-                    callback(data.responseData.feed);
+                    callback(data.responseData.feed, feed);
                 }
             });
         }
