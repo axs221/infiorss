@@ -14,6 +14,26 @@ define([
             app.feedList.on('add', this.addOne, this);
             app.feedList.on('reset', this.addAll, this);
             app.feedList.fetch(); // Load from local storage
+
+            if (app.feedList.length === 0) {
+                app.feedList.create({
+                    uri: "http://rss.cnn.com/rss/cnn_topstories.rss"
+                });
+                app.feedList.create({
+                    uri: "http://feeds.nbcnews.com/feeds/topstories"
+                });
+                app.feedList.create({
+                    uri: "http://rssfeeds.indystar.com/indystar/todaystopstories"
+                });
+                app.feedList.create({
+                    uri: "http://www.wthr.com/category/23903/local-news?clienttype=rss"
+                });
+                app.feedList.create({
+                    uri: "http://www.reddit.com/.rss"
+                });
+            }
+
+            app.articlesView.displayArticles();
         },
         events: {
             'keypress #new-feed': 'createFeedOnEnter',

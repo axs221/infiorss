@@ -57,6 +57,7 @@ define([
         template: _.template($('#feed-template').html()),
         initialize: function() {
             app.feedList.on('add', this.addOne, this);
+
         },
         addOne: function() {
             app.articlesView.displayArticles();

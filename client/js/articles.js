@@ -53,8 +53,10 @@ define([
             app.articleList.each(this.addOne, this);
         },
         isDisplayingArticles: false,
+        redisplayArticles: false,
         displayArticles: function() {
             if (this.isDisplayingArticles) {
+                this.redisplayArticles = true;
                 return;
             }
             this.isDisplayingArticles = true;
@@ -106,6 +108,12 @@ define([
                     };
                     app.tagView.displayTags();
                     caller.isDisplayingArticles = false;
+
+                    if (caller.redisplayArticles) {
+                        // Refresh needed, new feed may have been added
+                        caller.redisplayArticles = false;
+                        caller.displayArticles();
+                    }
                 }));
             };
 
