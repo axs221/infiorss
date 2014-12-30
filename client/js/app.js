@@ -8,8 +8,9 @@ define([
   'tags',
   'app',
   'feeds',
-  'appview'
-], function($, _, Backbone, BackboneLS, Articles, Tags, app, Feeds, Appview) {
+  'appview',
+  'commonwords'
+], function($, _, Backbone, BackboneLS, Articles, Tags, app, Feeds, Appview, commonwords) {
   var initialize = function(){
   }
 

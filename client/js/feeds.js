@@ -55,6 +55,12 @@ define([
     app.FeedView = Backbone.View.extend({
         tagName: 'span',
         template: _.template($('#feed-template').html()),
+        initialize: function() {
+            app.feedList.on('add', this.addOne, this);
+        },
+        addOne: function() {
+            app.articlesView.displayArticles();
+        },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
             return this;
