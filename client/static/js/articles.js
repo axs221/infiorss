@@ -55,6 +55,10 @@ define([
         isDisplayingArticles: false,
         redisplayArticles: false,
         displayArticles: function() {
+            if (app.feedList.length === 0) {
+                return; 
+            }
+            
             if (this.isDisplayingArticles) {
                 this.redisplayArticles = true;
                 return;

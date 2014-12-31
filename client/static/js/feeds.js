@@ -39,9 +39,7 @@ define([
                 success: function(data) {
                     if (data.responseData !== null) {
                         this.caller.attributes.title = data.responseData.feed.title;
-                        this.caller.save(null, {
-  type: 'POST'
-});
+                        this.caller.save();
                     }
                     this.callback(this.caller);
                 }

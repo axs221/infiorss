@@ -4,6 +4,7 @@ from django.db import models
 
 class Feed(models.Model):
     uri = models.CharField(max_length=300)
+    title = models.CharField(max_length=300, default="News")
 
     def __str__(self):
-        return self.uri
+        return self.title
