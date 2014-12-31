@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'reader',
 )
 
@@ -62,7 +63,7 @@ DATABASES = {
 	#'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-	'NAME': 'infio',
+    	'NAME': 'infio',
     }
 }
 
@@ -83,10 +84,57 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
-STATIC_URL = '/'
+STATIC_URL = '/client/'
 
 print BASE_DIR
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "client/"),
 )
+
+# Django REST Framework
+REST_FRAMEWORK = {  
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'mysite.log',
+            'formatter': 'verbose'
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'simple'
+           }
+    },
+    'loggers': {
+    'django': {
+        'handlers':['console'],
+        'propagate': True,
+        'level':'INFO',
+    },
+        'infiorss': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+    }
+}

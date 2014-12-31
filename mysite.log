@@ -1,0 +1,46 @@
+[31/Dec/2014 13:50:47] DEBUG [django.db.backends:91] (0.003) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None
+[31/Dec/2014 13:50:47] DEBUG [django.db.backends:91] (0.001) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+[31/Dec/2014 13:50:56] ERROR [infiorss.urls:23] TEST
+[31/Dec/2014 13:50:56] WARNING [django.request:143] Not Found: /feeds/
+[31/Dec/2014 13:52:35] DEBUG [django.db.backends:91] (0.003) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None
+[31/Dec/2014 13:52:35] DEBUG [django.db.backends:91] (0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+[31/Dec/2014 13:53:16] WARNING [django.request:143] Not Found: /api/feeds/
+[31/Dec/2014 13:53:29] DEBUG [django.db.backends:91] (0.003) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None
+[31/Dec/2014 13:53:29] DEBUG [django.db.backends:91] (0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+[31/Dec/2014 13:53:32] WARNING [django.request:143] Not Found: /api/feeds/
+[31/Dec/2014 13:53:34] WARNING [django.request:143] Not Found: /api/feeds/
+[31/Dec/2014 13:53:37] DEBUG [django.db.backends:91] (0.003) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None
+[31/Dec/2014 13:53:37] DEBUG [django.db.backends:91] (0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+[31/Dec/2014 13:53:39] WARNING [django.request:143] Not Found: /api/feeds/
+[31/Dec/2014 13:56:52] DEBUG [infiorss.urls:32] FOOOOO
+[31/Dec/2014 13:58:09] DEBUG [infiorss.urls:34] FOOOOO
+[31/Dec/2014 13:59:26] DEBUG [infiorss.urls:34] FOOOOO
+[31/Dec/2014 13:59:59] DEBUG [infiorss.urls:34] FOOOOO
+[31/Dec/2014 14:00:12] DEBUG [infiorss.urls:34] FOOOOO
+[31/Dec/2014 14:02:13] DEBUG [infiorss.urls:34] FOOOOO
+[31/Dec/2014 14:02:21] DEBUG [infiorss.urls:34] FOOOOO
+[31/Dec/2014 14:03:08] DEBUG [infiorss.urls:34] FOOOOO
