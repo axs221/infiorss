@@ -19,9 +19,8 @@ class FeedViewSet(viewsets.ModelViewSet):
 router = routers.DefaultRouter()
 router.register(r'feeds', FeedViewSet)
 
-
-
 urlpatterns = [
+    url(r'^client/', include('client.urls')),
     url(r'^api/', include(router.urls)),
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^showtime/', views.showtime),
