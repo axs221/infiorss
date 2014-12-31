@@ -96,9 +96,10 @@ STATICFILES_DIRS = (
 REST_FRAMEWORK = {  
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    # TODO: Re-enable this. Have to add authentication to the client, otherwise you will get a 403.
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    # ]
 }
 
 LOGGING = {

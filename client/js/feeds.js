@@ -9,6 +9,7 @@ define([
 ], function($, _, Backbone, app) {
 
     app.Feed = Backbone.Model.extend({
+        url: "/api/feeds/",
         initialize: function() {
             // Try to use the main domain if possible, since subdomains often don't have favicons.
             var domainMatch = this.attributes.uri.match(/\.([a-z0-9]+\.)?[a-z0-9]*\.[a-z]{2,6}/i);
@@ -38,7 +39,9 @@ define([
                 success: function(data) {
                     if (data.responseData !== null) {
                         this.caller.attributes.title = data.responseData.feed.title;
-                        this.caller.save();
+                        this.caller.save(null, {
+  type: 'POST'
+});
                     }
                     this.callback(this.caller);
                 }
@@ -48,7 +51,8 @@ define([
 
     app.FeedList = Backbone.Collection.extend({
         model: app.Feed,
-        localStorage: new Backbone.LocalStorage("backbone-infiorss")
+        // localStorage: new Backbone.LocalStorage("backbone-infiorss")
+        url: "/api/feeds/"
     });
     app.feedList = new app.FeedList();
 
