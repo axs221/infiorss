@@ -9,7 +9,7 @@ define([
 ], function($, _, Backbone, app) {
 
     app.Feed = Backbone.Model.extend({
-        url: "/api/feeds/",
+        urlRoot: "/api/feeds/",
         initialize: function() {
             // Try to use the main domain if possible, since subdomains often don't have favicons.
             var domainMatch = this.attributes.uri.match(/\.([a-z0-9]+\.)?[a-z0-9]*\.[a-z]{2,6}/i);
@@ -20,6 +20,7 @@ define([
             }
         },
         defaults: {
+            id: "",
             favicon: '',
             uri: '',
             title: ''

@@ -20,6 +20,18 @@ define([
         events: {
             'keypress #new-feed': 'createFeedOnEnter',
             "click #load-opml": "loadOpml",
+            "click .remove-feed": "removeFeed",
+        },
+        createFeedOnEnter: function(e) {
+            var enter_key = 13;
+            if (e.which !== enter_key) {
+                return;
+            }
+            app.feedList.create({
+                uri: this.input.val().trim(),
+                title: ''
+            });
+            this.input.val(''); // Clear the input box
         },
         loadOpml: function(file) {
             var reader = new FileReader();
@@ -43,16 +55,11 @@ define([
             reader.readAsText(file);
 
         },
-        createFeedOnEnter: function(e) {
-            var enter_key = 13;
-            if (e.which !== enter_key) {
-                return;
-            }
-            app.feedList.create({
-                uri: this.input.val().trim(),
-                title: ''
-            });
-            this.input.val(''); // Clear the input box
+        removeFeed: function(e) {
+            var id = $(e.currentTarget).data("id");
+            var feed = app.feedList.get(id);
+            feed.destroy();
+            e.target.parentElement.parentElement.removeChild(e.target.parentElement);
         },
         addOne: function(feed) {
             var view = new app.FeedView({

@@ -1,0 +1,68 @@
+header {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    background: white;
+    padding: 2px;
+    border-bottom: thin solid black;
+    background: #acd;
+    z-index: 1;
+}
+footer {
+    position: fixed;
+    bottom: 0px;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: thin solid black;
+}
+.tag-template {
+    margin-left: 10px;
+}
+#new-feed {
+    margin: 15px 0 0 15px;
+}
+#feed-container {
+    position: fixed;
+    top: 25px;
+    width: 325px;
+    height: 100vh;
+    padding: 0px;
+    background: #acd;
+}
+#feed-list {
+    padding: 15px;
+}
+#feed-list label {
+    width: 215px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+#articles-view {
+    position: relative;
+    top: 35px;
+    left: 350px;
+    margin: 0;
+    padding: 0;
+    width: 70%;
+}
+.article {
+    background: linear-gradient(#f0faff, #f0faff);
+    width: 90%;
+    max-height: 240px;
+    padding: 15px;
+    margin: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: thin solid #eee;
+}
+.article-content {
+    margin-left: 20px;
+    background: #e7faff;
+    border: thin dotted #ddd;
+}
+.article-feed-title {
+    background: #bde;
+}

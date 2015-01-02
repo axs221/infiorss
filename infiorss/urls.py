@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Feed
-        fields = ('uri','title')
+        fields = ('id', 'uri','title')
 
 class FeedViewSet(viewsets.ModelViewSet):
     queryset = models.Feed.objects.all()
