@@ -4,8 +4,10 @@ define([
     'underscore',
     'backbone',
     'backbone.localStorage',
-    'app'
-], function($, _, Backbone, app) {
+    'app',
+    "../templates/compiled-templates",
+    'handlebars.runtime'
+], function($, _, Backbone, app, Templates, Handlebars) {
     app.Tag = Backbone.Model.extend({
         defaults: {
             tag: '',
@@ -38,7 +40,7 @@ define([
     app.tagList = new app.TagList();
 
     app.TagView = Backbone.View.extend({
-        template: _.template($('#tag-template').html()),
+        template: Handlebars['tag-template.hbs'],
         tagName: 'span',
         events: {
             'click [type="checkbox"]': 'clicked',

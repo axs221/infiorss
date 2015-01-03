@@ -5,8 +5,10 @@ define([
     'underscore',
     'backbone',
     'backbone.localStorage',
-    'app'
-], function($, _, Backbone, app) {
+    'app',
+    '../templates/compiled-templates',
+    'handlebars.runtime'
+], function($, _, Backbone, app, Templates, Handlebars) {
 
     app.Feed = Backbone.Model.extend({
         urlRoot: "/api/feeds/",
@@ -57,7 +59,7 @@ define([
 
     app.FeedView = Backbone.View.extend({
         tagName: 'span',
-        template: _.template($('#feed-template').html()),
+        template: Handlebars['feed-template.hbs'],
         initialize: function() {
             app.feedList.on('add', this.addOne, this);
 

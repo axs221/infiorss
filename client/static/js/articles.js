@@ -4,8 +4,10 @@ define([
     'underscore',
     'backbone',
     'backbone.localStorage',
-    'app'
-], function($, _, Backbone, app) {
+    'app',
+    '../templates/compiled-templates',
+    'handlebars.runtime'
+], function($, _, Backbone, app, Templates, Handlebars) {
 
     app.Article = Backbone.Model.extend({
         defaults: {
@@ -28,7 +30,7 @@ define([
     var articlesViewInitialized = false;
     app.ArticlesView = Backbone.View.extend({
         tagName: 'span',
-        template: _.template($('#article-template').html()),
+        template: Handlebars['article-template.hbs'],
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
             return this;

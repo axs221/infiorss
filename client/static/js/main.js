@@ -7,7 +7,8 @@ require.config({
     jquery: 'lib/jquery/dist/jquery',
     underscore: 'lib/underscore/underscore',
     backbone: 'lib/backbone/backbone',
-    'backbone.localStorage': 'http://cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.0/backbone.localStorage-min'
+    'backbone.localStorage': 'http://cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.0/backbone.localStorage-min',
+    'handlebars.runtime': 'lib/handlebars/handlebars.runtime.amd',
   }
 });
 
