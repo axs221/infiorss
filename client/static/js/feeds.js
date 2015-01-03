@@ -22,7 +22,6 @@ define([
             }
         },
         defaults: {
-            id: "",
             favicon: '',
             uri: '',
             title: ''

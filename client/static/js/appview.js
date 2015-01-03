@@ -30,7 +30,7 @@ define([
             app.feedList.create({
                 uri: this.input.val().trim(),
                 title: ''
-            });
+            }, {wait: true}); // Wait to be able to retrieve the feed's ID from PostgreSQL/Django, so we are able to delete the feed if clicked in UI.
             this.input.val(''); // Clear the input box
         },
         loadOpml: function(file) {
@@ -46,8 +46,9 @@ define([
                     var $feeds = $xml.find("outline[type='rss']")
                     $feeds.each(function(index, feed) {
                         app.feedList.create({
-                            uri: feed.attributes['xmlUrl'].value
-                        });
+                            uri: feed.attributes['xmlUrl'].value,
+                            title: feed.attributes['title'].value
+                        }, {wait: true}); // Wait to be able to retrieve the feed's ID from PostgreSQL/Django, so we are able to delete the feed if clicked in UI.
                     });
                 };
             })(file);
