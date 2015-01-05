@@ -5,12 +5,13 @@ define([
   'backbone',
   'backbone.localStorage',
   'articles',
+  'articles-paginator',
   'tags',
   'app',
   'feeds',
   'appview',
   'commonwords'
-], function($, _, Backbone, BackboneLS, Articles, Tags, app, Feeds, Appview, commonwords) {
+], function($, _, Backbone, BackboneLS, Articles, ArticlesPaginator, Tags, app, Feeds, Appview, commonwords) {
   var initialize = function(){
   }
 

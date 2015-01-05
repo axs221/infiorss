@@ -45,10 +45,26 @@ define([
         },
         addOne: function(article) {
             // TODO: do we really need a new view? It runs initialize again each time, so I had to add an init bool to make sure events are only registered once.
-            var view = new app.ArticlesView({
-                model: article
+            // article.page = app.Paginator.getPage();
+
+            // if (article.page === app.Paginator.myPage) {
+            //     var view = new app.ArticlesView({
+            //         model: article
+            //     });
+            //     $('#articles-view').append(view.render().el);
+            // }
+        },
+        renderCurrentPage: function() {
+            $('#articles-view').html('');
+
+            app.articleList.each(function(article) {
+                if (article.attributes.page == app.Paginator.myPage) {
+                    var view = new app.ArticlesView({
+                        model: article
+                    });
+                    $('#articles-view').append(view.render().el);
+                }
             });
-            $('#articles-view').append(view.render().el);
         },
         addAll: function() {
             this.$('#articles-view').html('');
@@ -58,9 +74,9 @@ define([
         redisplayArticles: false,
         displayArticles: function() {
             if (app.feedList.length === 0) {
-                return; 
+                return;
             }
-            
+
             if (this.isDisplayingArticles) {
                 this.redisplayArticles = true;
                 return;
@@ -79,7 +95,7 @@ define([
                 this.feedCount = app.feedList.length;
 
                 this.getRss(feed, this, (function(data, feed, caller) {
-                    var articlesToLoadPerFeed = Math.max(1, Math.min(data.entries.length, 21-caller.feedCount))
+                    var articlesToLoadPerFeed = Math.max(1, Math.min(data.entries.length, 26 - caller.feedCount))
                     for (var i = 0; i < articlesToLoadPerFeed; i++) {
                         var entry = data.entries[i];
 
@@ -101,13 +117,19 @@ define([
                         if (isTagSelected && isFilteredOut) {
                             continue;
                         }
-                        app.articleList.create({
+
+                        var article = app.articleList.create({
                             favicon: feed.attributes.favicon,
                             feed: feed.attributes.title,
                             title: entry.title,
                             link: entry.link,
-                            content: entry.content
+                            content: entry.content,
+                            page: app.Paginator.getPage(),
                         });
+
+                        if (article.attributes.page === app.Paginator.myPage) {
+                            caller.renderCurrentPage();
+                        }
 
                         app.tagView.parseTags(entry);
                         //TODO - shouldn't run every feed, but a pain because it uses callbacks
@@ -115,12 +137,14 @@ define([
                     app.tagView.displayTags();
                     caller.isDisplayingArticles = false;
 
-                    if (caller.redisplayArticles) {
-                        // Refresh needed, new feed may have been added
-                        caller.redisplayArticles = false;
-                        caller.displayArticles();
-                    }
                 }));
+
+                if (this.redisplayArticles) {
+                    // Refresh needed, new feed may have been added
+                    this.redisplayArticles = false;
+                    this.displayArticles();
+                    break;
+                }
             };
 
         },
@@ -137,6 +161,23 @@ define([
             });
         }
     });
+
+
+    app.Paginator = {
+        myPage: 1, // TODO: this is a stupid name, should be currentPage.
+        currentPage: 1,
+        currentPageCount: 0,
+        totalCountPerPage: 9,
+        getPage: function() {
+            this.currentPageCount = this.currentPageCount + 1;
+            if (this.currentPageCount >= this.totalCountPerPage) {
+                this.currentPage = this.currentPage + 1;
+                this.currentPageCount = 0;
+            }
+            return this.currentPage;
+        }
+    }
+
 
     app.articlesView = new app.ArticlesView();
 });

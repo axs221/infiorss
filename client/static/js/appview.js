@@ -4,8 +4,21 @@ define([
     'underscore',
     'backbone',
     'backbone.localStorage',
-    'app'
+    'app',
+    'jqueryui'
 ], function($, _, Backbone, app) {
+
+    $("#feed-container").resizable({
+        handles: 'e',
+        minWidth: '50',
+        maxWidth: '350',
+        resize: function() {
+            var remainingSpace = $(this).parent().width() - $(this).outerWidth(),
+                divTwo = $(this).next(),
+                divTwoWidth = remainingSpace - (divTwo.outerWidth() - divTwo.width());
+            divTwo.width(divTwoWidth);
+        }
+    });
 
     app.AppView = Backbone.View.extend({
         el: '#readerapp',

@@ -16,6 +16,10 @@ footer {
     border-radius: 5px;
     border: thin solid black;
 }
+.pagination {
+    margin: 0 0 0 20px !important;
+
+}
 .tag-template {
     margin-left: 10px;
 }
@@ -40,7 +44,7 @@ footer {
     text-overflow: ellipsis;
     vertical-align: middle;
 }
-#articles-view {
+#articles-container {
     position: relative;
     top: 35px;
     left: 350px;
